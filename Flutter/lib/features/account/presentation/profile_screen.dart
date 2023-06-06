@@ -102,8 +102,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                         child: CircularProgressIndicator());
                                   }
                                   return ListTile(
-                                    title: Text(snapshot.data.name),
-                                    subtitle: Text(snapshot.data.desc),
+                                    title: Text(snapshot.data['product'].name),
+                                    subtitle:
+                                        Text(snapshot.data['product'].desc),
                                     trailing: const Icon(Icons.chevron_right),
                                     onTap: () {
                                       context.pushNamed(AppRoute.product.name,
