@@ -6,7 +6,7 @@ part of 'api_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchAccountHash() => r'c36cc621fd7800774e09d9104b11962409f59f3c';
+String _$fetchAccountHash() => r'50eba8c6c4ad7220c9b4450444171a5d86835b97';
 
 /// See also [fetchAccount].
 @ProviderFor(fetchAccount)
@@ -20,7 +20,7 @@ final fetchAccountProvider = AutoDisposeFutureProvider<dynamic>.internal(
 );
 
 typedef FetchAccountRef = AutoDisposeFutureProviderRef<dynamic>;
-String _$fetchProductsHash() => r'20266ff259742f8f32202f38029795e768f13b78';
+String _$fetchProductsHash() => r'bf7c58eb344bdcb3be2f3349b2c7e4a524c9658e';
 
 /// See also [fetchProducts].
 @ProviderFor(fetchProducts)
@@ -35,7 +35,7 @@ final fetchProductsProvider = AutoDisposeFutureProvider<dynamic>.internal(
 );
 
 typedef FetchProductsRef = AutoDisposeFutureProviderRef<dynamic>;
-String _$aPIServiceHash() => r'fd51f55e72793fed1f5331c1f742c51a77598866';
+String _$aPIServiceHash() => r'5c25a2e89c3c1b04eb9e8303d11d5d6198504439';
 
 /// See also [APIService].
 @ProviderFor(APIService)

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:project_marketplace/api/api_service.dart';
-import 'package:project_marketplace/features/account/data/account.dart';
 
 import '../../../routes/app_route_enum.dart';
 
@@ -62,13 +61,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     return const Center(
                                         child: CircularProgressIndicator());
                                   }
+                                  debugPrint(data.toString());
                                   return ListTile(
-                                    title: Text(snapshot.data.name),
-                                    subtitle: Text(snapshot.data.desc),
+                                    title: Text(snapshot.data['product'].name),
+                                    subtitle:
+                                        Text(snapshot.data['product'].desc),
                                     trailing: const Icon(Icons.chevron_right),
                                     onTap: () {
                                       context.pushNamed(AppRoute.product.name,
-                                          extra: snapshot.data);
+                                          extra: snapshot.data['product'].id);
                                     },
                                   );
                                 },
@@ -108,7 +109,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                     trailing: const Icon(Icons.chevron_right),
                                     onTap: () {
                                       context.pushNamed(AppRoute.product.name,
-                                          extra: snapshot.data);
+                                          extra: snapshot.data['product'].id);
                                     },
                                   );
                                 },

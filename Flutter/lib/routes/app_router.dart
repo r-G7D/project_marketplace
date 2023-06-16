@@ -7,6 +7,7 @@ import 'package:project_marketplace/features/account/presentation/profile_screen
 import 'package:project_marketplace/features/account/presentation/register_screen.dart';
 import 'package:project_marketplace/features/dashboard/presentation/dashboard_screen.dart';
 import 'package:project_marketplace/features/product/presentation/add_product_screen.dart';
+import 'package:project_marketplace/features/product/presentation/ar_screen.dart';
 import 'package:project_marketplace/features/product/presentation/edit_product_screen.dart';
 import 'package:project_marketplace/features/product/presentation/product_screen.dart';
 import 'app_route_enum.dart';
@@ -64,7 +65,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           pageBuilder: (context, state) => NoTransitionPage(
                 key: state.pageKey,
                 child: ProductScreen(
-                  productData: state.extra as Map<String, dynamic>,
+                  // productData: state.extra as Map<String, dynamic>,
+                  productId: state.extra as String,
                 ),
               ),
           routes: [
@@ -84,6 +86,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                 child: EditProductScreen(
                   productData: state.extra as Map<String, dynamic>,
                 ),
+              ),
+            ),
+            GoRoute(
+              path: 'ar_product',
+              name: AppRoute.arProduct.name,
+              pageBuilder: (context, state) => NoTransitionPage(
+                key: state.pageKey,
+                child: ProductARScreen(url: state.extra as String),
               ),
             ),
           ]),

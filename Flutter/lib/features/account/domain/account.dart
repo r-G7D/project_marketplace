@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../product/data/product.dart';
+import '../../product/domain/product.dart';
 
 part 'account.freezed.dart';
 part 'account.g.dart';
