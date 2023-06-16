@@ -49,49 +49,54 @@ class DashboardScreen extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, child) {
         final productAsync = ref.watch(fetchProductsProvider);
-        return productAsync.when(data: (products) {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return ListTile(
-                title: Text(product.name),
-                subtitle: Text(product.desc),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () async {
-                  final imgList = await ref
-                      .read(apiServiceProvider)
-                      .fetchImages(product.id);
-                  final arImg = await ref
-                      .read(apiServiceProvider)
-                      .fetchArImage(product.id);
-                  Future.delayed(const Duration(milliseconds: 500), () {
-                    if (context.mounted) {
-                      context.pushNamed(
-                        AppRoute.product.name,
-                        extra: {
-                          'product': product,
-                          'arImage': arImg,
-                          'images': imgList,
-                        },
-                      );
-                    }
-                  });
-                },
-              );
-            },
-          );
-        }, error: (error, stackTrace) {
-          return Center(
-            child: Text(error.toString()),
-          );
-        }, loading: () {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+        return productAsync.when(
+          data: (products) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return ListTile(
+                  title: Text(product.name),
+                  subtitle: Text(product.desc),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    // final imgList = await ref
+                    //     .read(apiServiceProvider)
+                    //     .fetchImages(product.id);
+                    // final arImg = await ref
+                    //     .read(apiServiceProvider)
+                    //     .fetchArImage(product.id);
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      if (context.mounted) {
+                        context.pushNamed(
+                          AppRoute.product.name,
+                          extra: product.id,
+                          // extra: {
+                          //   'product': product,
+                          //   'arImage': arImg,
+                          //   'images': imgList,
+                          // },
+                        );
+                      }
+                    });
+                  },
+                );
+              },
+            );
+          },
+          error: (error, stackTrace) {
+            return Center(
+              child: Text(error.toString()),
+            );
+          },
+          loading: () {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        );
       },
     );
   }

@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:project_marketplace/api/failure/failure.dart';
-import 'package:project_marketplace/features/account/data/account.dart';
-import 'package:project_marketplace/features/product/data/product.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../features/account/domain/account.dart';
+import '../features/product/domain/product.dart';
 import 'pref/pref_keys.dart';
 
 part 'api_service.g.dart';
 
-final pb = PocketBase(dotenv.env['BASE_URL']!);
+final pb = PocketBase(dotenv.env['PROD_URL']!);
 
 final apiServiceProvider = Provider<APIService>((ref) {
   return APIService();
@@ -61,9 +61,8 @@ class APIService extends _$APIService {
       authModel = pb.authStore.model.toJson();
       final prefs = await SharedPreferences.getInstance();
       prefs.setString(PrefKeys.accessTokenPrefsKey, pb.authStore.token);
-      prefs.setString(
-          PrefKeys.accessModelPrefsKey, pb.authStore.model.id ?? '');
-      prefs.setString(PrefKeys.accessNamePrefsKey, authModel['username'] ?? '');
+      prefs.setString(PrefKeys.accessModelPrefsKey, pb.authStore.model.id);
+      prefs.setString(PrefKeys.accessNamePrefsKey, authModel['username']);
       return true;
     } on ClientException catch (e) {
       debugPrint('Login failed | ${e.response.toString()}');
@@ -125,7 +124,6 @@ class APIService extends _$APIService {
       if (!pb.authStore.isValid) {
         return false;
       }
-      state = const AsyncData(null);
       return true;
     } catch (e) {
       debugPrint('Login failed');
@@ -133,7 +131,7 @@ class APIService extends _$APIService {
     }
   }
 
-  Future<dynamic> fetchProduct(String id) async {
+  Future fetchProduct(String id) async {
     try {
       final res = await pb.collection('products').getOne(id);
       debugPrint('Product fetched');
@@ -154,32 +152,32 @@ class APIService extends _$APIService {
     }
   }
 
-  Future<String> fetchArImage(String id) async {
-    try {
-      final res = await pb.collection('products').getOne(id);
-      debugPrint('AR Image fetched');
-      final arImage = res.getStringValue('ar_image');
-      final url = pb.files.getUrl(res, arImage).toString();
-      return url;
-    } on ClientException catch (e) {
-      debugPrint('Fetch AR Image failed | ${e.response.toString()}');
-      return '';
-    }
-  }
+  // Future<String> fetchArImage(String id) async {
+  //   try {
+  //     final res = await pb.collection('products').getOne(id);
+  //     debugPrint('AR Image fetched');
+  //     final arImage = res.getStringValue('ar_image');
+  //     final url = pb.files.getUrl(res, arImage).toString();
+  //     return url;
+  //   } on ClientException catch (e) {
+  //     debugPrint('Fetch AR Image failed | ${e.response.toString()}');
+  //     return '';
+  //   }
+  // }
 
-  Future<List<String>> fetchImages(String id) async {
-    try {
-      final res = await pb.collection('products').getOne(id);
-      debugPrint('Images fetched');
-      final imgList = res.getListValue<String>('image');
-      final url =
-          imgList.map((e) => pb.files.getUrl(res, e).toString()).toList();
-      return url;
-    } on ClientException catch (e) {
-      debugPrint('Fetch Images failed | ${e.response.toString()}');
-      return [];
-    }
-  }
+  // Future<List<String>> fetchImages(String id) async {
+  //   try {
+  //     final res = await pb.collection('products').getOne(id);
+  //     debugPrint('Images fetched');
+  //     final imgList = res.getListValue<String>('image');
+  //     final url =
+  //         imgList.map((e) => pb.files.getUrl(res, e).toString()).toList();
+  //     return url;
+  //   } on ClientException catch (e) {
+  //     debugPrint('Fetch Images failed | ${e.response.toString()}');
+  //     return [];
+  //   }
+  // }
 
   Future addProduct({
     required String name,
@@ -306,7 +304,7 @@ class APIService extends _$APIService {
 }
 
 @riverpod
-Future<dynamic> fetchAccount(FetchAccountRef ref) async {
+Future fetchAccount(FetchAccountRef ref) async {
   try {
     final id = pb.authStore.model.id!;
     final res = await pb.collection('users').getOne(id);
@@ -319,7 +317,7 @@ Future<dynamic> fetchAccount(FetchAccountRef ref) async {
 }
 
 @riverpod
-Future<dynamic> fetchProducts(FetchProductsRef ref) async {
+Future fetchProducts(FetchProductsRef ref) async {
   try {
     final res = await pb.collection('products').getFullList();
     final productList = res.map((e) => Product.fromJson(e.toJson())).toList();

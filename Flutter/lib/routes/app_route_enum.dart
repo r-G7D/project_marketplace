@@ -6,5 +6,6 @@ enum AppRoute {
   product,
   addProduct,
   editProduct,
+  arProduct,
   profile
 }
